@@ -2,9 +2,9 @@
 pipeline {
 		agent { node { label 'master' } }
 
-		parameters {
-			string(name:'TAG_NAME',defaultValue: '',description:'')
-		}
+//		parameters {
+//			string(name:'TAG_NAME',defaultValue: '',description:'')
+//		}
 
 		environment {
 			DOCKER_CREDENTIAL_ID = 'dockerhub-id'
@@ -49,47 +49,47 @@ pipeline {
 //				}
 //			}
 
-			stage('push latest'){
-				when{
-					branch 'k8s-test'
-				}
-				steps{
-					container ('master') {
-						sh 'docker tag  $REGISTRY/$DOCKERHUB_NAMESPACE/$APP_NAME:SNAPSHOT-$BRANCH_NAME-$BUILD_NUMBER $REGISTRY/$DOCKERHUB_NAMESPACE/$APP_NAME:latest '
-						sh 'docker push  $REGISTRY/$DOCKERHUB_NAMESPACE/$APP_NAME:latest '
-					}
-				}
-			}
+//			stage('push latest'){
+//				when{
+//					branch 'k8s-test'
+//				}
+//				steps{
+//					container ('master') {
+//						sh 'docker tag  $REGISTRY/$DOCKERHUB_NAMESPACE/$APP_NAME:SNAPSHOT-$BRANCH_NAME-$BUILD_NUMBER $REGISTRY/$DOCKERHUB_NAMESPACE/$APP_NAME:latest '
+//						sh 'docker push  $REGISTRY/$DOCKERHUB_NAMESPACE/$APP_NAME:latest '
+//					}
+//				}
+//			}
 
-			stage('deploy to dev') {
-				when{
-					branch 'k8s'
-				}
-				steps {
-					input(id: 'deploy-to-dev', message: 'deploy to dev?')
-					kubernetesDeploy(configs: 'deploy/dev/**', enableConfigSubstitution: true, kubeconfigId: "$KUBECONFIG_CREDENTIAL_ID")
-				}
-			}
-			stage('push with tag'){
-				when{
-					expression{
-						return params.TAG_NAME =~ /v.*/
-					}
-				}
-				steps {
-					container ('master') {
-						input(id: 'release-image-with-tag', message: 'release image with tag?')
-					//	withCredentials([usernamePassword(credentialsId: "$GITHUB_CREDENTIAL_ID", passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
-					//		sh 'git config --global user.email "kubesphere@yunify.com" '
-					//		sh 'git config --global user.name "kubesphere" '
-					//		sh 'git tag -a $TAG_NAME -m "$TAG_NAME" '
-					//		sh 'git push http://$GIT_USERNAME:$GIT_PASSWORD@github.com/$GITHUB_ACCOUNT/devops-java-sample.git --tags --ipv4'
-					//	}
-						sh 'docker tag  $REGISTRY/$DOCKERHUB_NAMESPACE/$APP_NAME:SNAPSHOT-$BRANCH_NAME-$BUILD_NUMBER $REGISTRY/$DOCKERHUB_NAMESPACE/$APP_NAME:$TAG_NAME '
-						sh 'docker push  $REGISTRY/$DOCKERHUB_NAMESPACE/$APP_NAME:$TAG_NAME '
-					}
-				}
-			}
+//			stage('deploy to dev') {
+//				when{
+//					branch 'k8s'
+//				}
+//				steps {
+//					input(id: 'deploy-to-dev', message: 'deploy to dev?')
+//					kubernetesDeploy(configs: 'deploy/dev/**', enableConfigSubstitution: true, kubeconfigId: "$KUBECONFIG_CREDENTIAL_ID")
+//				}
+//			}
+//			stage('push with tag'){
+//				when{
+//					expression{
+//						return params.TAG_NAME =~ /v.*/
+//					}
+//				}
+//				steps {
+//					container ('master') {
+//						input(id: 'release-image-with-tag', message: 'release image with tag?')
+//					//	withCredentials([usernamePassword(credentialsId: "$GITHUB_CREDENTIAL_ID", passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
+//					//		sh 'git config --global user.email "kubesphere@yunify.com" '
+//					//		sh 'git config --global user.name "kubesphere" '
+//					//		sh 'git tag -a $TAG_NAME -m "$TAG_NAME" '
+//					//		sh 'git push http://$GIT_USERNAME:$GIT_PASSWORD@github.com/$GITHUB_ACCOUNT/devops-java-sample.git --tags --ipv4'
+//					//	}
+//						sh 'docker tag  $REGISTRY/$DOCKERHUB_NAMESPACE/$APP_NAME:SNAPSHOT-$BRANCH_NAME-$BUILD_NUMBER $REGISTRY/$DOCKERHUB_NAMESPACE/$APP_NAME:$TAG_NAME '
+//						sh 'docker push  $REGISTRY/$DOCKERHUB_NAMESPACE/$APP_NAME:$TAG_NAME '
+//					}
+//				}
+//			}
 //			stage('deploy to production') {
 //				when{
 //					expression{
