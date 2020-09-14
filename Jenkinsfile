@@ -2,7 +2,7 @@
 
 def call(Map map) {
 	pipeline {
-		agent { node { label 'maven' } }
+		agent { node { label 'master' } }
 
 		parameters {
 			string(name:'TAG_NAME',defaultValue: '',description:'')
@@ -58,7 +58,7 @@ def call(Map map) {
 
 			stage ('build & push') {
 				steps {
-					container ('maven') {
+					container ('master') {
 						sh 'mvn -Dmaven.test.skip=true -gs `pwd`/settings.xml  package'
 						sh 'docker build -f Dockerfile -t $REGISTRY/$DOCKERHUB_NAMESPACE/$APP_NAME:SNAPSHOT-$BRANCH_NAME-$BUILD_NUMBER .'
 						withCredentials([usernamePassword(passwordVariable : 'DOCKER_PASSWORD' ,usernameVariable : 'DOCKER_USERNAME' ,credentialsId : "$DOCKER_CREDENTIAL_ID" ,)]) {
@@ -74,7 +74,7 @@ def call(Map map) {
 					branch 'k8s-test'
 				}
 				steps{
-					container ('maven') {
+					container ('master') {
 						sh 'docker tag  $REGISTRY/$DOCKERHUB_NAMESPACE/$APP_NAME:SNAPSHOT-$BRANCH_NAME-$BUILD_NUMBER $REGISTRY/$DOCKERHUB_NAMESPACE/$APP_NAME:latest '
 						sh 'docker push  $REGISTRY/$DOCKERHUB_NAMESPACE/$APP_NAME:latest '
 					}
@@ -97,7 +97,7 @@ def call(Map map) {
 					}
 				}
 				steps {
-					container ('maven') {
+					container ('master') {
 						input(id: 'release-image-with-tag', message: 'release image with tag?')
 					//	withCredentials([usernamePassword(credentialsId: "$GITHUB_CREDENTIAL_ID", passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
 					//		sh 'git config --global user.email "kubesphere@yunify.com" '
@@ -110,16 +110,16 @@ def call(Map map) {
 					}
 				}
 			}
-			stage('deploy to production') {
-				when{
-					expression{
-						return params.TAG_NAME =~ /v.*/
-					}
-				}
-				steps {
-					input(id: 'deploy-to-production', message: 'deploy to production?')
-					kubernetesDeploy(configs: 'deploy/prod/**', enableConfigSubstitution: true, kubeconfigId: "$KUBECONFIG_CREDENTIAL_ID")
-				}
-			}
+//			stage('deploy to production') {
+//				when{
+//					expression{
+//						return params.TAG_NAME =~ /v.*/
+//					}
+//				}
+//				steps {
+//					input(id: 'deploy-to-production', message: 'deploy to production?')
+//					kubernetesDeploy(configs: 'deploy/prod/**', enableConfigSubstitution: true, kubeconfigId: "$KUBECONFIG_CREDENTIAL_ID")
+//				}
+//			}
 		}
 	}}
