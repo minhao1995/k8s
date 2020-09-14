@@ -10,7 +10,7 @@ def call(Map map) {
 
 		environment {
 			DOCKER_CREDENTIAL_ID = 'dockerhub-id'
-			GITHUB_CREDENTIAL_ID = 'github-id'
+			GITHUB_CREDENTIAL_ID = 'minhao-github'
 			KUBECONFIG_CREDENTIAL_ID = 'demo-kubeconfig'
 			REGISTRY = 'harbor.1hai.cn'
 			DOCKERHUB_NAMESPACE = 'java'
