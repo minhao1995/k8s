@@ -1,7 +1,5 @@
 #!groovy
-
-def call(Map map) {
-	pipeline {
+pipeline {
 		agent { node { label 'master' } }
 
 		parameters {
@@ -16,7 +14,6 @@ def call(Map map) {
 			DOCKERHUB_NAMESPACE = 'java'
 			GITHUB_ACCOUNT = 'kubesphere'
 			APP_NAME = 'koala'
-			// SONAR_CREDENTIAL_ID = 'sonar-token'
 		}
 
 		stages {
@@ -27,28 +24,6 @@ def call(Map map) {
 				}
 			}
 
-			// stage ('unit test') {
-			//     steps {
-			//         container ('maven') {
-			//             sh 'mvn clean -o -gs `pwd`/configuration/settings.xml test'
-			//         }
-			//    }
-			// }
-
-			// stage('sonarqube analysis') {
-			//   steps {
-			//     container ('maven') {
-			//       withCredentials([string(credentialsId: "$SONAR_CREDENTIAL_ID", variable: 'SONAR_TOKEN')]) {
-			//         withSonarQubeEnv('sonar') {
-			//         sh "mvn sonar:sonar -o -gs `pwd`/configuration/settings.xml -Dsonar.branch=$BRANCH_NAME -Dsonar.login=$SONAR_TOKEN"
-			//        }
-			//       }
-			//      timeout(time: 1, unit: 'HOURS') {
-			//         waitForQualityGate abortPipeline: true
-			//      }
-			//    }
-			//  }
-			//}
 
 			stage ('build & push') {
 				steps {
@@ -116,4 +91,4 @@ def call(Map map) {
 //				}
 //			}
 		}
-	}}
+}
