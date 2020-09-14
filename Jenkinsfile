@@ -25,12 +25,6 @@ pipeline {
 			}
 
 			stage('Maven Build') {
-				agent {
-					docker {
-						image 'maven:3-jdk-8-alpine'
-						args '-v $HOME/.m2:/root/.m2'
-					}
-				}
 				steps {
 					echo "2. 代码编译打包"
 					sh 'mvn clean package -Dfile.encoding=UTF-8 -DskipTests=true'
