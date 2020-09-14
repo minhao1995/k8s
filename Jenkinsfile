@@ -23,20 +23,31 @@ pipeline {
 					checkout(scm)
 				}
 			}
-
-
-			stage ('build & push') {
-				steps {
-					container ('master') {
-						sh 'mvn -Dmaven.test.skip=true -gs `pwd`/settings.xml  package'
-						sh 'docker build -f Dockerfile -t $REGISTRY/$DOCKERHUB_NAMESPACE/$APP_NAME:SNAPSHOT-$BRANCH_NAME-$BUILD_NUMBER .'
-						withCredentials([usernamePassword(passwordVariable : 'DOCKER_PASSWORD' ,usernameVariable : 'DOCKER_USERNAME' ,credentialsId : "$DOCKER_CREDENTIAL_ID" ,)]) {
-							sh 'echo "$DOCKER_PASSWORD" | docker login $REGISTRY -u "$DOCKER_USERNAME" --password-stdin'
-							sh 'docker push  $REGISTRY/$DOCKERHUB_NAMESPACE/$APP_NAME:SNAPSHOT-$BRANCH_NAME-$BUILD_NUMBER'
-						}
+			stage('Maven Build') {
+				agent {
+					docker {
+						image 'maven:latest'
+						args '-v /root/.m2:/root/.m2'
 					}
 				}
+				steps {
+					echo "2.Maven Build Stage"
+					sh 'mvn -B clean package -Dmaven.test.skip=true'
+				}
 			}
+
+//			stage ('build & push') {
+//				steps {
+//					container ('master') {
+//						sh 'mvn -Dmaven.test.skip=true -gs `pwd`/settings.xml  package'
+//						sh 'docker build -f Dockerfile -t $REGISTRY/$DOCKERHUB_NAMESPACE/$APP_NAME:SNAPSHOT-$BRANCH_NAME-$BUILD_NUMBER .'
+//						withCredentials([usernamePassword(passwordVariable : 'DOCKER_PASSWORD' ,usernameVariable : 'DOCKER_USERNAME' ,credentialsId : "$DOCKER_CREDENTIAL_ID" ,)]) {
+//							sh 'echo "$DOCKER_PASSWORD" | docker login $REGISTRY -u "$DOCKER_USERNAME" --password-stdin'
+//							sh 'docker push  $REGISTRY/$DOCKERHUB_NAMESPACE/$APP_NAME:SNAPSHOT-$BRANCH_NAME-$BUILD_NUMBER'
+//						}
+//					}
+//				}
+//			}
 
 			stage('push latest'){
 				when{
