@@ -21,13 +21,7 @@ def call(Map map) {
 
 		stages {
 
-            stage ('start') {
-                echo "pipeline start "
-            }
-
-
 			stage ('checkout scm') {
-                echo "checkout scm"
 				steps {
 					checkout(scm)
 				}
