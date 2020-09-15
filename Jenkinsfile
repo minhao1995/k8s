@@ -54,15 +54,13 @@ pipeline {
 //				}
 //			}
 
-//			stage('deploy to dev') {
-//				when{
-//					branch 'k8s'
-//				}
-//				steps {
-//					input(id: 'deploy-to-dev', message: 'deploy to dev?')
-//					kubernetesDeploy(configs: 'deploy/dev/**', enableConfigSubstitution: true, kubeconfigId: "$KUBECONFIG_CREDENTIAL_ID")
-//				}
-//			}
+			stage('deploy to dev') {
+				steps {
+					input(id: 'deploy-to-dev', message: 'deploy to dev?')
+					kubernetesDeploy(configs: 'deploy/dev/**', enableConfigSubstitution: true, kubeconfigId: "$KUBECONFIG_CREDENTIAL_ID")
+				}
+			}
+
 //			stage('push with tag'){
 //				when{
 //					expression{
