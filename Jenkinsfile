@@ -11,9 +11,9 @@ pipeline {
 			GITHUB_CREDENTIAL_ID = 'minhao-github'
 			KUBECONFIG_CREDENTIAL_ID = 'demo-kubeconfig'
 			REGISTRY = 'harbor.1hai.cn'
-			DOCKERHUB_NAMESPACE = 'java'
+			DOCKERHUB_NAMESPACE = 'java/devops-java-test'
 			GITHUB_ACCOUNT = 'kubesphere'
-			APP_NAME = 'koala'
+			APP_NAME = 'k8sDemo'
 		}
 
 		stages {
