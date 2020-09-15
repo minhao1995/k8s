@@ -5,11 +5,11 @@ metadata:
     app: kubesphere
     component: ks-sample-dev
   name: ks-sample-dev
-  namespace: kubesphere-sample-dev
+  namespace: kubesphere-sample-dev2
 spec:
   ports:
     - name: http
-      port: 8080
+      port: 8882
       protocol: TCP
       targetPort: 8080
       nodePort: 30861

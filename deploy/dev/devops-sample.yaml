@@ -1,4 +1,4 @@
-apiVersion: app/v1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
@@ -6,7 +6,7 @@ metadata:
     component: ks-sample-dev
     tier: backend
   name: ks-sample-dev
-  namespace: kubesphere-sample-dev
+  namespace: kubesphere-sample-dev2
 spec:
   progressDeadlineSeconds: 600
   replicas: 1
@@ -28,7 +28,7 @@ spec:
               value: js|html
             - name: CACHE_PUBLIC_EXPIRATION
               value: 3d
-          image: $REGISTRY/$HARBOR_NAMESPACE/$APP_NAME:SNAPSHOT-$BRANCH_NAME-$BUILD_NUMBER
+          image: $REGISTRY/$DOCKERHUB_NAMESPACE/$APP_NAME:SNAPSHOT-$BRANCH_NAME-$BUILD_NUMBER
           readinessProbe:
             httpGet:
               path: /
@@ -43,8 +43,8 @@ spec:
               protocol: TCP
           resources:
             limits:
-              cpu: 200m
-              memory: 500Mi
+              cpu: 600m
+              memory: 1600Mi
             requests:
               cpu: 100m
               memory: 100Mi
