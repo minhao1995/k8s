@@ -13,7 +13,7 @@ pipeline {
 			REGISTRY = 'harbor.1hai.cn'
 			DOCKERHUB_NAMESPACE = 'java/devops-java-test'
 			GITHUB_ACCOUNT = 'kubesphere'
-			APP_NAME = 'k8sDemo'
+			APP_NAME = 'k8s-demo'
 		}
 
 		stages {
