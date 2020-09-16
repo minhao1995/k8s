@@ -28,7 +28,7 @@ spec: #这是关于该Deployment的描述，可以理解为你期待该Deploymen
               value: js|html
             - name: CACHE_PUBLIC_EXPIRATION
               value: 3d
-          image: $REGISTRY/$DOCKERHUB_NAMESPACE:SNAPSHOT-$APP_NAME-$BRANCH_NAME-$BUILD_NUMBER #使用镜像nginx:1.7.9创建container，该container默认80端口可访问
+          image: $REGISTRY/$DOCKERHUB_NAMESPACE:SNAPSHOT-$APP_NAME-$BUILD_NUMBER #使用镜像nginx:1.7.9创建container，该container默认80端口可访问
           readinessProbe:
             httpGet:
               path: /
